@@ -13,6 +13,7 @@ class UserListViewController: UITableViewController {
     // MARK: - Properties
     
     var users = [User]()
+    var downloader = Downloader()
     
     // MARK: - UIViewController methods
     
@@ -41,7 +42,28 @@ class UserListViewController: UITableViewController {
     func populateTable() {
         
         // Download data for all users, decode JSON,
+        weak var weakSelf = self
+        
+        downloader.downloadData(urlString: "https://reqres.in/") {
+            (data) in
+            
+            guard let jsonData = data else {
+                weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
+                return
+            }
+            
+            do {
+                let user = try JSONDecoder().decode(UserData.self, from: jsonData)
+                weakSelf!.users = user.data
+                //weakSelf!.tableView.reloadData()
+            } catch {
+                weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
+            }
+        }
+        
         // add objects to array, reload table view
+        //users.append(users)
+        tableView.reloadData()
     }
 
     // MARK: - UITableViewDataSource methods
@@ -62,6 +84,14 @@ class UserListViewController: UITableViewController {
         cell.textLabel?.text = "\(user.lastName), \(user.firstName)"
 
         return cell
+    }
+    
+    func presentAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 
 }
