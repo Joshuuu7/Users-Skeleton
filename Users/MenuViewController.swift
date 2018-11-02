@@ -10,6 +10,10 @@ import UIKit
 
 class MenuViewController: UIViewController {
 
+    var tableView: UITableView? = nil
+    var users = [User]()
+    var downloader = Downloader()
+    
     // MARK: - UIViewController methods
     
     override func viewDidLoad() {
@@ -29,6 +33,13 @@ class MenuViewController: UIViewController {
         } else if segue.identifier == "Get User List" {
             let controller = segue.destination as! UserListViewController
             // Set properties of controller as needed to pass objects
+            if let indexPath = tableView?.indexPathForSelectedRow {
+                let object = users[indexPath.row]
+                
+                controller.downloader = downloader
+                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
         } else if segue.identifier == "Add User" {
             let controller = segue.destination as! AddUserViewController
             // Set properties of controller as needed to pass objects

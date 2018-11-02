@@ -15,6 +15,11 @@ class UserListViewController: UITableViewController {
     var users = [User]()
     var downloader = Downloader()
     
+    var firstName = ""
+    var lastName = ""
+    var avatar = ""
+
+    
     // MARK: - UIViewController methods
     
     override func viewDidLoad() {
@@ -26,6 +31,8 @@ class UserListViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Detail" {
@@ -52,17 +59,17 @@ class UserListViewController: UITableViewController {
                 return
             }
             
+            //let user = User(firstName: self.firstName, lastName: self.lastName, avatar: self.avatar)
             do {
                 let user = try JSONDecoder().decode(UserData.self, from: jsonData)
                 weakSelf!.users = user.data
-                //weakSelf!.tableView.reloadData()
             } catch {
                 weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
             }
         }
         
         // add objects to array, reload table view
-        //users.append(users)
+        
         tableView.reloadData()
     }
 

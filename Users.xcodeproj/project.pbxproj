@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		424C00A3218920CD00528369 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C00A2218920CD00528369 /* Downloader.swift */; };
+		424C00A5218AAC0C00528369 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C00A4218AAC0B00528369 /* UserCell.swift */; };
 		70FAE719216E98B300A46B80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FAE718216E98B300A46B80 /* AppDelegate.swift */; };
 		70FAE71B216E98B300A46B80 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FAE71A216E98B300A46B80 /* MenuViewController.swift */; };
 		70FAE71E216E98B300A46B80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70FAE71C216E98B300A46B80 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		424C00A2218920CD00528369 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		424C00A4218AAC0B00528369 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		70FAE715216E98B300A46B80 /* Users.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Users.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FAE718216E98B300A46B80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70FAE71A216E98B300A46B80 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				70FAE72C216EA0D200A46B80 /* DetailViewController.swift */,
 				70FAE734216EBE8600A46B80 /* AddUserViewController.swift */,
 				70FAE736216EC40700A46B80 /* DeleteUserViewController.swift */,
+				424C00A4218AAC0B00528369 /* UserCell.swift */,
 				70FAE72E216EA18300A46B80 /* JSON.swift */,
 				424C00A2218920CD00528369 /* Downloader.swift */,
 				70FAE71C216E98B300A46B80 /* Main.storyboard */,
@@ -164,6 +167,7 @@
 				424C00A3218920CD00528369 /* Downloader.swift in Sources */,
 				70FAE735216EBE8600A46B80 /* AddUserViewController.swift in Sources */,
 				70FAE72B216E9D0D00A46B80 /* GetSingleUserViewController.swift in Sources */,
+				424C00A5218AAC0C00528369 /* UserCell.swift in Sources */,
 				70FAE72D216EA0D200A46B80 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
