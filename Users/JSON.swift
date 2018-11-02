@@ -22,22 +22,23 @@ struct User: Codable {
         case lastName = "last_name"
         case avatar
     }
-    
+}
+
+// Create structures to describe JSON responses
+
+extension User {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.avatar = try container.decode(String.self, forKey: .avatar)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.firstName, forKey: .firstName)
-        try container.encode(self.lastName, forKey: .lastName)
-        try container.encode(self.avatar, forKey: .avatar)
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(self.firstName, forKey: .firstName)
+            try container.encode(self.lastName, forKey: .lastName)
+            try container.encode(self.avatar, forKey: .avatar)
+        }
     }
 }
-
-// Create structures to describe JSON responses
-
 

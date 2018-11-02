@@ -51,7 +51,7 @@ class UserListViewController: UITableViewController {
         // Download data for all users, decode JSON,
         weak var weakSelf = self
         
-        downloader.downloadData(urlString: "https://reqres.in/") {
+        downloader.downloadData(urlString: "https://reqres.in/api/users?page=2") {
             (data) in
             
             guard let jsonData = data else {
@@ -59,17 +59,17 @@ class UserListViewController: UITableViewController {
                 return
             }
             
-            //let user = User(firstName: self.firstName, lastName: self.lastName, avatar: self.avatar)
+            let user = User(firstName: self.firstName, lastName: self.lastName, avatar: self.avatar)
             do {
                 let user = try JSONDecoder().decode(UserData.self, from: jsonData)
                 weakSelf!.users = user.data
             } catch {
                 weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
             }
+            self.users.append(user)
         }
         
         // add objects to array, reload table view
-        
         tableView.reloadData()
     }
 
@@ -84,7 +84,7 @@ class UserListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "User Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "User Cell", for: indexPath) as! UserCell
 
         // Configure the cell...
         let user = users[indexPath.row]
