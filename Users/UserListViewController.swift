@@ -13,6 +13,7 @@ class UserListViewController: UITableViewController {
     // MARK: - Properties
     
     var users = [User]()
+    var userMeta = [UserMeta]()
     var downloader = Downloader()
     
     var firstName = ""
@@ -26,6 +27,7 @@ class UserListViewController: UITableViewController {
         super.viewDidLoad()
 
         populateTable()
+        //let count = users.count
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,26 +53,33 @@ class UserListViewController: UITableViewController {
         // Download data for all users, decode JSON,
         weak var weakSelf = self
         
-        downloader.downloadData(urlString: "https://reqres.in/api/users?page=2") {
-            (data) in
+        //for 1 ... 4 in userMeta.total {
             
-            guard let jsonData = data else {
-                weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
-                return
-            }
             
-            let user = User(firstName: self.firstName, lastName: self.lastName, avatar: self.avatar)
-            do {
-                let user = try JSONDecoder().decode(UserData.self, from: jsonData)
-                weakSelf!.users = user.data
-            } catch {
-                weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
+            downloader.downloadData(urlString: "https://reqres.in/api/users?page=3") {
+                (data) in
+                
+                guard let jsonData = data else {
+                    weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
+                    return
+                }
+                do {
+                    let decodedUser = try JSONDecoder().decode(UserData.self, from: jsonData)
+                    weakSelf!.users = decodedUser.data
+                    //let decodedUser = try JSONDecoder().decode(UserData.self, from: jsonData)
+                    //weakSelf!.userMeta = decodedUser.userMeta
+                    //weakSelf!.userMeta.append(users)
+                } catch {
+                    weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
+                }
+                //self.users.append(user)
+                self.tableView.reloadData()
+                print(self.users)
             }
-            self.users.append(user)
-        }
-        
-        // add objects to array, reload table view
-        tableView.reloadData()
+            // add objects to array, reload table view
+            //users.append(users)
+            //tableView.reloadData()
+        //}
     }
 
     // MARK: - UITableViewDataSource methods
@@ -91,6 +100,15 @@ class UserListViewController: UITableViewController {
         cell.textLabel?.text = "\(user.lastName), \(user.firstName)"
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            users.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+        }
     }
     
     func presentAlert(title: String, message: String) {

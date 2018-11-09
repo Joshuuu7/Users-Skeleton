@@ -10,6 +10,10 @@ import UIKit
 
 class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
+    //var users = [User]()
+    var user: User?
+    var downloader = Downloader()
+    
     // MARK: - Outlets
     
     @IBOutlet weak var idPickerView: UIPickerView!
@@ -18,6 +22,7 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,14 +32,17 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Detail" {
             let controller = segue.destination as! DetailViewController
-            
             // Set properties of controller as needed to pass objects
+            controller.detailItem = user
+            //self.idPickerView = self.idPickerView.dataSource as! UIPickerView
         }
     }
 
     // MARK: - GetSingleUserViewController methods
     
     @IBAction func userSelected(_ sender: UIButton) {
+        
+        weak var weakSelf = self
         
         // Get the selected row of the picker view
         
@@ -46,7 +54,36 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
         
         // Else, decode JSON and manually call
         // performSegue(withIdentifier: "Show Detail", sender: self)
-    }    
+        
+        
+        // Get the selected row of the picker view.
+        self.idPickerView.delegate = self
+        let selectedId = idPickerView.selectedRow(inComponent: 0) + 1
+        let id = selectedId
+    
+        let usersURL = "https://reqres.in/api/users/" + "\(id)"
+    
+        downloader.downloadData(urlString: usersURL) {
+            (data) in
+            
+            guard let jsonData = data else {
+                weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
+                return
+            }
+        
+            do {
+                let decodedUser = try JSONDecoder().decode(SingleUserData.self, from: jsonData)
+                weakSelf!.user = decodedUser.data
+                weakSelf!.performSegue(withIdentifier: "Show Detail", sender: weakSelf!)
+                //weakSelf!.users.append(decodedUser.data)
+            } catch {
+                weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
+            }
+            //self.users.append(id)
+            //self.idPickerView = self.idPickerView.dataSource as! UIPickerView
+            //self.performSegue(withIdentifier: "Show Detail", sender: self.idPickerView)
+        }
+    }
 
     func presentAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

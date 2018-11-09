@@ -10,6 +10,7 @@ import UIKit
 
 class AddUserViewController: UIViewController, UITextFieldDelegate {
 
+    var users = [User]()
     let uploader = Downloader()
     
     // MARK: - Outlets
@@ -37,7 +38,9 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
     @IBAction func saveUser(_ sender: Any) {
         
         // Make sure text fields are not empty
-        if (firstNameTextField.text! != "" && lastNameTextField.text! != "" && avatarUrlTextField.text! != "") {
+         weak var weakSelf = self
+        if (firstNameTextField.text! != "" && lastNameTextField.text! != "") {
+            //&& avatarUrlTextField.text! != "") {
             // Create User object from text field text
             let user = User(firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, avatar: avatarUrlTextField.text!)
             
@@ -45,7 +48,7 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
             do {
                 let jsonData = try JSONEncoder().encode(user)
                 //let user = try JSONDecoder().decode(UserData.self, from: jsonData)
-                // weakSeusers = user.data
+                 //weakSelf!.users = user.append(jsonData)
                 guard let url = URL(string: "https://reqres.in/api/users") else {
                     // Perform some error handling
                     print("Invalid URL string")
@@ -107,6 +110,17 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentAlertWithoutButton(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        self.present(alertController, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+            alertController.dismiss(animated: true, completion: nil)
+        })
         
         present(alertController, animated: true, completion: nil)
     }
