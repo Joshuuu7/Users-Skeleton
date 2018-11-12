@@ -60,7 +60,7 @@ extension User {
     }
 }
 
-/*extension UserMeta {
+extension UserMeta {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.total = try container.decode(String.self, forKey: .total)
@@ -72,4 +72,4 @@ extension User {
             
         }
     }
-}*/
+}

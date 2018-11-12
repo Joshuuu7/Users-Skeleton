@@ -10,6 +10,8 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    var downloader: Downloader?
+    
     // MARK: - Outlets
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -46,6 +48,10 @@ class DetailViewController: UIViewController {
             if let imageView = avatarImageView {
                 // Optional - Download avatar image and assign
                 // it to imageView
+                downloader?.downloadImage(urlString: detail.avatar) {
+                    (image: UIImage?) in
+                    self.avatarImageView.image = image
+                }
             }
             
             if let label = nameLabel {

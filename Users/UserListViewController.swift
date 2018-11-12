@@ -18,8 +18,8 @@ class UserListViewController: UITableViewController {
     
     var firstName = ""
     var lastName = ""
-    var avatar = ""
-
+    var image: UIImage?
+    
     
     // MARK: - UIViewController methods
     
@@ -53,10 +53,10 @@ class UserListViewController: UITableViewController {
         // Download data for all users, decode JSON,
         weak var weakSelf = self
         
-        //for 1 ... 4 in userMeta.total {
+        //for userMeta in 1...4 {
             
             
-            downloader.downloadData(urlString: "https://reqres.in/api/users?page=3") {
+            downloader.downloadData(urlString: "https://reqres.in/api/users?page=" + "\(userMeta)") {
                 (data) in
                 
                 guard let jsonData = data else {
@@ -68,7 +68,7 @@ class UserListViewController: UITableViewController {
                     weakSelf!.users = decodedUser.data
                     //let decodedUser = try JSONDecoder().decode(UserData.self, from: jsonData)
                     //weakSelf!.userMeta = decodedUser.userMeta
-                    //weakSelf!.userMeta.append(users)
+                    //weakSelf!.userMeta.append(contains(users as! UIFocusEnvironment))
                 } catch {
                     weakSelf!.presentAlert(title: "Error", message: "Invalid JSON downloaded")
                 }
@@ -98,7 +98,13 @@ class UserListViewController: UITableViewController {
         // Configure the cell...
         let user = users[indexPath.row]
         cell.textLabel?.text = "\(user.lastName), \(user.firstName)"
-
+ 
+        downloader.downloadImage(urlString: user.avatar) {
+            (image: UIImage?) in
+            cell.avatarImageView!.image = image
+            
+        }
+        
         return cell
     }
     

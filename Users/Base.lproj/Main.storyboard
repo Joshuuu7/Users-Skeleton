@@ -224,24 +224,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="User Cell" textLabel="tcc-Ae-pWD" rowHeight="60" style="IBUITableViewCellStyleDefault" id="SX7-dE-6CH" customClass="UserCell" customModule="Users" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="User Cell" rowHeight="60" id="SX7-dE-6CH" customClass="UserCell" customModule="Users" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SX7-dE-6CH" id="bTP-Ij-L96">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="First Name" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tcc-Ae-pWD">
-                                            <rect key="frame" x="16" y="0.0" width="343" height="59.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="First &amp; Last Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qy3-th-tX9" userLabel="First Name Label">
+                                            <rect key="frame" x="166" y="19" width="136" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDL-YQ-ZpZ">
+                                            <rect key="frame" x="16" y="0.0" width="73" height="59"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="firstNameLabel" destination="tcc-Ae-pWD" id="1I8-mn-XPx"/>
+                                    <outlet property="avatarImageView" destination="zDL-YQ-ZpZ" id="qNX-Jk-HwD"/>
+                                    <outlet property="firstNameLabel" destination="qy3-th-tX9" id="Mvk-nW-7pt"/>
                                     <segue destination="d7F-bI-BoU" kind="show" identifier="Show Detail" id="OQx-SM-fYI"/>
                                 </connections>
                             </tableViewCell>
@@ -257,7 +262,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8ko-V5-EMa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1734" y="-1257"/>
+            <point key="canvasLocation" x="1733.5999999999999" y="-1257.1214392803599"/>
         </scene>
         <!--User Details-->
         <scene sceneID="tL4-gx-eTO">
@@ -372,6 +377,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Bs5-Cm-ye0"/>
+        <segue reference="OQx-SM-fYI"/>
     </inferredMetricsTieBreakers>
 </document>
