@@ -34,6 +34,7 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
             let controller = segue.destination as! DetailViewController
             // Set properties of controller as needed to pass objects
             controller.detailItem = user
+            controller.downloader = downloader
             //self.idPickerView = self.idPickerView.dataSource as! UIPickerView
         }
     }

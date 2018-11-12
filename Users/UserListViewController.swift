@@ -42,6 +42,7 @@ class UserListViewController: UITableViewController {
                 let controller = segue.destination as! DetailViewController
                 controller.detailItem = users[indexPath.row]
                 // Pass other objects to controller as needed
+                controller.downloader = downloader
             }
         }
     }
@@ -54,8 +55,7 @@ class UserListViewController: UITableViewController {
         weak var weakSelf = self
         
         //for userMeta in 1...4 {
-            
-            
+
             downloader.downloadData(urlString: "https://reqres.in/api/users?page=" + "\(userMeta)") {
                 (data) in
                 

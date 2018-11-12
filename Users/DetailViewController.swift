@@ -45,12 +45,12 @@ class DetailViewController: UIViewController {
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = detailItem {
-            if let imageView = avatarImageView {
+            if let imageView = self.avatarImageView {
                 // Optional - Download avatar image and assign
                 // it to imageView
                 downloader?.downloadImage(urlString: detail.avatar) {
                     (image: UIImage?) in
-                    self.avatarImageView.image = image
+                    imageView.image = image
                 }
             }
             
