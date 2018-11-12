@@ -18,7 +18,7 @@ class UserListViewController: UITableViewController {
     
     var firstName = ""
     var lastName = ""
-    var image: UIImage?
+    var avatar: UIImage?
     
     
     // MARK: - UIViewController methods
@@ -97,7 +97,7 @@ class UserListViewController: UITableViewController {
 
         // Configure the cell...
         let user = users[indexPath.row]
-        cell.textLabel?.text = "\(user.lastName), \(user.firstName)"
+        cell.firstNameLabel?.text = "\(user.lastName), \(user.firstName)"
  
         downloader.downloadImage(urlString: user.avatar) {
             (image: UIImage?) in
