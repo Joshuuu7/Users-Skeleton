@@ -45,36 +45,29 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
         
         weak var weakSelf = self
         
-        // Get the selected row of the picker view
-        
-        // Try to download the data for the user with the selected id
-        
-        // If response code was 404, display "user not found" alert
-        
         // Else if response code was not 200, print error to console
-        
-        // Else, decode JSON and manually call
-        // performSegue(withIdentifier: "Show Detail", sender: self)
-        
-        
+
         // Get the selected row of the picker view.
         self.idPickerView.delegate = self
         let selectedId = idPickerView.selectedRow(inComponent: 0) + 1
         let id = selectedId
     
+        // Try to download the data for the user with the selected id
         let usersURL = "https://reqres.in/api/users/" + "\(id)"
     
         downloader.downloadData(urlString: usersURL) {
             (data) in
             
+            // If response code was 404, display "user not found" alert
             guard let jsonData = data else {
-                weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
+                weakSelf!.presentAlert(title: "Error", message: "User NOT found.")
                 return
             }
-        
             do {
+                // Else, decode JSON and manually call
                 let decodedUser = try JSONDecoder().decode(SingleUserData.self, from: jsonData)
                 weakSelf!.user = decodedUser.data
+                // performSegue(withIdentifier: "Show Detail", sender: self)
                 weakSelf!.performSegue(withIdentifier: "Show Detail", sender: weakSelf!)
                 //weakSelf!.users.append(decodedUser.data)
             } catch {

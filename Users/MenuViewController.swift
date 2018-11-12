@@ -30,6 +30,7 @@ class MenuViewController: UIViewController {
         if segue.identifier == "Get Single User" {
             let controller = segue.destination as! GetSingleUserViewController
             // Set properties of controller as needed to pass objects
+            controller.downloader = downloader
         } else if segue.identifier == "Get User List" {
             let controller = segue.destination as! UserListViewController
             // Set properties of controller as needed to pass objects

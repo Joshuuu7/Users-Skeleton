@@ -34,8 +34,6 @@ class UserListViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
-    
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Detail" {
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -102,9 +100,7 @@ class UserListViewController: UITableViewController {
         downloader.downloadImage(urlString: user.avatar) {
             (image: UIImage?) in
             cell.avatarImageView!.image = image
-            
         }
-        
         return cell
     }
     

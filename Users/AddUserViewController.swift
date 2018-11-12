@@ -81,7 +81,7 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                             print("Success: user uploaded")
                             let alert = UIAlertController(title: "Success!", message: "\n User added", preferredStyle: .alert)
                             
-                            self.present(alert, animated: true, completion: nil)
+                            weakSelf?.present(alert, animated: true, completion: nil)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
                                 alert.dismiss(animated: true, completion: nil)
                             })

@@ -233,15 +233,15 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name Label" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qy3-th-tX9" userLabel="First Name Label">
-                                            <rect key="frame" x="106" y="15" width="253" height="29.5"/>
+                                            <rect key="frame" x="96" y="15" width="263" height="29.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zDL-YQ-ZpZ">
-                                            <rect key="frame" x="2" y="2" width="100" height="55.5"/>
+                                            <rect key="frame" x="2" y="2" width="90" height="55.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="100" id="fdN-7R-FQ0"/>
+                                                <constraint firstAttribute="width" constant="90" id="fdN-7R-FQ0"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
