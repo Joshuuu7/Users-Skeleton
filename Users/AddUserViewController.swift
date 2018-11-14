@@ -94,12 +94,25 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
 
                             
                             DispatchQueue.main.async {
-                                let alert = UIAlertController(title: "Success", message: "\n\nBold New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)", preferredStyle: .alert)
+                                let alert = UIAlertController(title: "Success", message: "\n\n New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)", preferredStyle: .alert)
                                 
                                 // Resource: https://iosdevcenters.blogspot.com/2016/05/hacking-uialertcontroller-in-swift.html
                                 let backView = alert.view.subviews.last?.subviews.last
                                 backView?.layer.cornerRadius = 10.0
                                 backView?.backgroundColor = UIColor.green
+                                
+                                let successString = "Success"
+                                var myMutableString = NSMutableAttributedString()
+                                myMutableString = NSMutableAttributedString(string: successString as String, attributes: [NSAttributedStringKey.font: UIFont(name: "Georgia", size: 18.0)!])
+                                myMutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.cyan, range: NSRange(location:0,length: successString.count))
+                                alert.setValue(myMutableString, forKey: "attributedTitle")
+                                
+                                let message  = "\n\n New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)"
+                                var messageMutableString = NSMutableAttributedString()
+                                messageMutableString = NSMutableAttributedString(string: message as String, attributes: [NSAttributedStringKey.font: UIFont(name: "Georgia", size: .bold)!])
+                                messageMutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.blue, range: NSRange(location:0,length:message.count))
+                                alert.setValue(messageMutableString, forKey: "attributedMessage")
+
                                 
                                 self.present(alert, animated: true, completion: nil)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
