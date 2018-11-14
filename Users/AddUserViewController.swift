@@ -45,16 +45,12 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
         if (firstNameTextField.text! != "" && lastNameTextField.text! != "") {
             //&& avatarUrlTextField.text! != "") {
             // Create User object from text field text
-            let user = User(firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, avatar: avatarUrlTextField.text!)
-            
+            let user = AddedUser(name: "\(firstNameTextField.text!) \(lastNameTextField.text!)", job: avatarUrlTextField.text! )//lastName: lastNameTextField.text!, avatar: avatarUrlTextField.text!)
+            //let firstLast = user.firstName + "" + user.lastName
+            //let addedUser = AddUserData(name: firstLast, job: "Leader", id: self.addedUser!.id, createdAt: self.addedUser!.createdAt)
             // Encode user to JSON like this:
             do {
-                let jsonData = try JSONEncoder().encode(user)
-                //let user = JSONDecoder().decode(self.addedUser, from: dec)
-                
-                //decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-
-                // let user = try JSONDecoder().decode(addedUser.self, from: decoder)
+                let data = try JSONEncoder().encode(user)
                  //weakSelf!.users = user.append(jsonData)
                 guard let url = URL(string: "https://reqres.in/api/users") else {
                     // Perform some error handling
@@ -66,7 +62,7 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                 request.cachePolicy = URLRequest.CachePolicy.reloadIgnoringLocalCacheData
                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 // Try to upload jsonData
-                let task = URLSession.shared.uploadTask(with: request, from: jsonData) {
+                let task = URLSession.shared.uploadTask(with: request, from: data) {
                     (data, response, error) in
                     let httpResponse = response as? HTTPURLResponse
                     // If response code is not 201, print error to console
@@ -87,37 +83,30 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                         
                         DispatchQueue.main.async {
                             print("Success: User uploaded")
-                            self.downloader.downloadData(urlString: "https://reqres.in/api/users") {
-                                (dat2a) in
-                                
-                                guard let jsonData = data else {
-                                    weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
-                                    return
-                                }
-                                do {
-                                    let decoder = JSONDecoder()
-                                    decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-                                    
-                                    let addedUser = try decoder.decode(AddedUser.self, from: jsonData)
-                                    var addedUserName = addedUser.addedUserData.name
-                                    let firstLast = "\(user.firstName) \(user.lastName)"
-                                    addedUserName = firstLast
-                                    //weakSelf!.users = user.append(jsonData)
-                                    print("Name: \(addedUser.addedUserData.createdAt), Id: \(addedUser.addedUserData.id), Created At: \(addedUser.addedUserData.createdAt)")
-                                }
-                                catch {
-                                    print("FAILED!!!")
-                                }
-                            }
-                            let firstLast = self.attributedText(withString: String(format: "New user: %@", user.firstName), boldString: "\(user.firstName)", font: .boldSystemFont(ofSize: 17.0))
-                            //var att = [NSFontAttributeName : UIFont.boldSystemFontOfSize(15)]
-                            //var boldText = NSMutableAttributedString(string:"\(user.firstName)", attributes:att)
-                            let alert = UIAlertController(title: "Success!", message: "\n User added. \n\n New User: \(user.firstName) \(user.lastName) created at: \(String(describing: self.addedUser?.createdAt)) with ID: ", preferredStyle: .alert)
                             
-                            weakSelf?.present(alert, animated: true, completion: nil)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
-                                alert.dismiss(animated: true, completion: nil)
-                            })
+                            let decoder = JSONDecoder()
+                            
+                            guard let addedUserDecoder = try? decoder.decode(AddUserData.self, from: data!) else {
+                                
+                                print("Failed")
+                                return
+                            }
+
+                            
+                            DispatchQueue.main.async {
+                                let alert = UIAlertController(title: "Success", message: "\n\nBold New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)", preferredStyle: .alert)
+                                
+                                // Resource: https://iosdevcenters.blogspot.com/2016/05/hacking-uialertcontroller-in-swift.html
+                                let backView = alert.view.subviews.last?.subviews.last
+                                backView?.layer.cornerRadius = 10.0
+                                backView?.backgroundColor = UIColor.green
+                                
+                                self.present(alert, animated: true, completion: nil)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+                                    alert.dismiss(animated: true, completion: nil)
+                                })
+                            }
+
                         }
                     }
                 }
@@ -177,3 +166,11 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
         return attributedString
     }
 }
+extension DateFormatter {
+    static let iso8601Full: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter
+    }()
+}
+
