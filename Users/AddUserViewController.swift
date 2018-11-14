@@ -11,7 +11,10 @@ import UIKit
 class AddUserViewController: UIViewController, UITextFieldDelegate {
 
     var users = [User]()
+    //var addedUser: User?
+    var addedUser: AddUserData?
     let uploader = Downloader()
+    let downloader = Downloader()
     
     // MARK: - Outlets
     
@@ -47,7 +50,11 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
             // Encode user to JSON like this:
             do {
                 let jsonData = try JSONEncoder().encode(user)
-                //let user = try JSONDecoder().decode(UserData.self, from: jsonData)
+                //let user = JSONDecoder().decode(self.addedUser, from: dec)
+                
+                //decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+
+                // let user = try JSONDecoder().decode(addedUser.self, from: decoder)
                  //weakSelf!.users = user.append(jsonData)
                 guard let url = URL(string: "https://reqres.in/api/users") else {
                     // Perform some error handling
@@ -77,9 +84,35 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                     } else {
                         // Download succeeded, decode the JSON data and
                         // display success alert
+                        
                         DispatchQueue.main.async {
-                            print("Success: user uploaded")
-                            let alert = UIAlertController(title: "Success!", message: "\n User added", preferredStyle: .alert)
+                            print("Success: User uploaded")
+                            self.downloader.downloadData(urlString: "https://reqres.in/api/users") {
+                                (dat2a) in
+                                
+                                guard let jsonData = data else {
+                                    weakSelf!.presentAlert(title: "Error", message: "Unable to download JSON data")
+                                    return
+                                }
+                                do {
+                                    let decoder = JSONDecoder()
+                                    decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+                                    
+                                    let addedUser = try decoder.decode(AddedUser.self, from: jsonData)
+                                    var addedUserName = addedUser.addedUserData.name
+                                    let firstLast = "\(user.firstName) \(user.lastName)"
+                                    addedUserName = firstLast
+                                    //weakSelf!.users = user.append(jsonData)
+                                    print("Name: \(addedUser.addedUserData.createdAt), Id: \(addedUser.addedUserData.id), Created At: \(addedUser.addedUserData.createdAt)")
+                                }
+                                catch {
+                                    print("FAILED!!!")
+                                }
+                            }
+                            let firstLast = self.attributedText(withString: String(format: "New user: %@", user.firstName), boldString: "\(user.firstName)", font: .boldSystemFont(ofSize: 17.0))
+                            //var att = [NSFontAttributeName : UIFont.boldSystemFontOfSize(15)]
+                            //var boldText = NSMutableAttributedString(string:"\(user.firstName)", attributes:att)
+                            let alert = UIAlertController(title: "Success!", message: "\n User added. \n\n New User: \(user.firstName) \(user.lastName) created at: \(String(describing: self.addedUser?.createdAt)) with ID: ", preferredStyle: .alert)
                             
                             weakSelf?.present(alert, animated: true, completion: nil)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
@@ -104,6 +137,9 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                 })
             }
         }
+        firstNameTextField.text = ""
+        lastNameTextField.text = ""
+        avatarUrlTextField.text = ""
     }
 
     func presentAlert(title: String, message: String) {
@@ -130,5 +166,14 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func attributedText(withString string: String, boldString: String, font: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string,
+                                                         attributes: [NSAttributedStringKey.font: font])
+        let boldFontAttribute: [NSAttributedStringKey: Any] = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: font.pointSize)]
+        let range = (string as NSString).range(of: boldString)
+        attributedString.addAttributes(boldFontAttribute, range: range)
+        return attributedString
     }
 }

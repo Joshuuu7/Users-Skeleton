@@ -67,7 +67,6 @@ class GetSingleUserViewController: UIViewController, UIPickerViewDataSource, UIP
                 // Else, decode JSON and manually call
                 let decodedUser = try JSONDecoder().decode(SingleUserData.self, from: jsonData)
                 weakSelf!.user = decodedUser.data
-                // performSegue(withIdentifier: "Show Detail", sender: self)
                 weakSelf!.performSegue(withIdentifier: "Show Detail", sender: weakSelf!)
                 //weakSelf!.users.append(decodedUser.data)
             } catch {

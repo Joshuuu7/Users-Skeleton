@@ -11,6 +11,26 @@ import Foundation
 struct UserData: Decodable {
     let data: [User]
     //let userMeta : [UserMeta]
+    //let addedUserData: AddUserData
+}
+
+struct AddedUser: Decodable {
+    
+    let addedUserData: AddUserData
+}
+
+struct AddUserData: Codable {
+    let name: String
+    let job: String
+    let id: String
+    let createdAt: Date
+    
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case job
+        case id
+        case createdAt
+    }
 }
 
 struct SingleUserData: Decodable {
@@ -72,4 +92,12 @@ extension UserMeta {
             
         }
     }
+}
+
+extension DateFormatter {
+    static let iso8601Full: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter
+    }()
 }
