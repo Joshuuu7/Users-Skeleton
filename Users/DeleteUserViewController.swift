@@ -64,7 +64,7 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
                 (data, response, error) in
                 let httpResponse = response as? HTTPURLResponse
                 // If response code is not 201, print error to console
-                if httpResponse!.statusCode != 201 {
+                if httpResponse!.statusCode != 204 {
                     // Perform some error handling
                     DispatchQueue.main.async {
                         print("HTTP Error: status code \(httpResponse!.statusCode).")
@@ -77,19 +77,7 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
                 }
                 else {
                     print("Success: User deleted")
-                    let decoder = JSONDecoder()
-                    guard let deletedUserDecoder = try? decoder.decode(DeletedUserData.self, from: data!) else {
-                        print("Failed")
-                        return
-                    }
-                    weakSelf!.deletedUser = deletedUserDecoder.data
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Success", message: "\n\n User deleted with ID \(id)", preferredStyle: .alert)
-                        weakSelf?.present(alert, animated: true, completion: nil)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
-                            alert.dismiss(animated: true, completion: nil)
-                        })
-                    }
+                    self.presentAlert(title: "Success", message: "User deleted with ID \(id)")
                 }
             }
             task.resume()
