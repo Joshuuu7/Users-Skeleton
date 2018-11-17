@@ -41,17 +41,16 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
     @IBAction func saveUser(_ sender: Any) {
         
         // Make sure text fields are not empty
-         weak var weakSelf = self
+        weak var weakSelf = self
         if (firstNameTextField.text! != "" && lastNameTextField.text! != "") {
             //&& avatarUrlTextField.text! != "") {
             // Create User object from text field text
             let user = AddedUser(name: "\(firstNameTextField.text!) \(lastNameTextField.text!)", job: avatarUrlTextField.text! )//lastName: lastNameTextField.text!, avatar: avatarUrlTextField.text!)
-            //let firstLast = user.firstName + "" + user.lastName
-            //let addedUser = AddUserData(name: firstLast, job: "Leader", id: self.addedUser!.id, createdAt: self.addedUser!.createdAt)
+            
             // Encode user to JSON like this:
             do {
                 let data = try JSONEncoder().encode(user)
-                 //weakSelf!.users = user.append(jsonData)
+                //weakSelf!.users = user.append(jsonData)
                 guard let url = URL(string: "https://reqres.in/api/users") else {
                     // Perform some error handling
                     print("Invalid URL string")
@@ -80,18 +79,13 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                     } else {
                         // Download succeeded, decode the JSON data and
                         // display success alert
-                        
                         DispatchQueue.main.async {
                             print("Success: User uploaded")
-                            
                             let decoder = JSONDecoder()
-                            
                             guard let addedUserDecoder = try? decoder.decode(AddUserData.self, from: data!) else {
-                                
                                 print("Failed")
                                 return
                             }
-
                             
                             DispatchQueue.main.async {
                                 let alert = UIAlertController(title: "Success", message: "\n\n New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)", preferredStyle: .alert)
@@ -109,17 +103,17 @@ class AddUserViewController: UIViewController, UITextFieldDelegate {
                                 
                                 let message  = "\n\n New User: \(addedUserDecoder.name) created at: \(addedUserDecoder.createdAt) with ID: \( addedUserDecoder.id)"
                                 var messageMutableString = NSMutableAttributedString()
-                                messageMutableString = NSMutableAttributedString(string: message as String, attributes: [NSAttributedStringKey.font: UIFont(name: "Georgia", size: .bold)!])
+                                messageMutableString = NSMutableAttributedString(string: message as String, attributes: [NSAttributedStringKey.font: UIFont(name: "Georgia", size: 14.0)!])
                                 messageMutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.blue, range: NSRange(location:0,length:message.count))
                                 alert.setValue(messageMutableString, forKey: "attributedMessage")
-
                                 
-                                self.present(alert, animated: true, completion: nil)
+                                
+                                weakSelf?.present(alert, animated: true, completion: nil)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
                                     alert.dismiss(animated: true, completion: nil)
                                 })
                             }
-
+                            
                         }
                     }
                 }

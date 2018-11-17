@@ -10,6 +10,10 @@ import UIKit
 
 class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
+    let downloader = Downloader()
+    var deletedUser: DeletedUser?
+    var deletedUserData = [DeletedUserData]()
+    
     // MARK: - Outlets
     
     @IBOutlet weak var idPickerView: UIPickerView!
@@ -28,13 +32,73 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     @IBAction func userSelected(_ sender: UIButton) {
         // Get the selected row of the picker view
-        
         // Try to delete the user with the selected id
-        
         // If response code was not 204, print error to console
-        
         // Else, display "user deleted" alert
+        
+        // Get the selected row of the picker view
+        self.idPickerView.delegate = self
+        let selectedId = idPickerView.selectedRow(inComponent: 0) + 1
+        let id = selectedId
+        weak var weakSelf = self
+        
+        let user = DeletedUser(id: "\(id)")
+        
+        let usersURL = "https://reqres.in/api/users/" + "\(id)"
+        
+        
+        guard let url = URL(string: usersURL) else {
+            // Perform some error handling
+            print("Invalid URL string")
+            return
+        }
+        do {
+            let decodedUser = try JSONEncoder().encode(user.self)
+            //weakSelf!.user = decodedUser
+            var request = URLRequest(url: url)
+            request.httpMethod = "DELETE"
+            request.cachePolicy = URLRequest.CachePolicy.reloadIgnoringLocalCacheData
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            // Try to upload jsonData
+            let task = URLSession.shared.uploadTask(with: request, from: decodedUser){
+                (data, response, error) in
+                let httpResponse = response as? HTTPURLResponse
+                // If response code is not 201, print error to console
+                if httpResponse!.statusCode != 201 {
+                    // Perform some error handling
+                    DispatchQueue.main.async {
+                        print("HTTP Error: status code \(httpResponse!.statusCode).")
+                    }
+                } else if (data == nil && error != nil) {
+                    // Perform some error handling
+                    DispatchQueue.main.async {
+                        print("No data deleted for User \(id).")
+                    }
+                }
+                else {
+                    print("Success: User deleted")
+                    let decoder = JSONDecoder()
+                    guard let deletedUserDecoder = try? decoder.decode(DeletedUserData.self, from: data!) else {
+                        print("Failed")
+                        return
+                    }
+                    weakSelf!.deletedUser = deletedUserDecoder.data
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Success", message: "\n\n User deleted with ID \(id)", preferredStyle: .alert)
+                        weakSelf?.present(alert, animated: true, completion: nil)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+                            alert.dismiss(animated: true, completion: nil)
+                        })
+                    }
+                }
+            }
+            task.resume()
+        } catch {
+            weakSelf!.presentAlert(title: "Error", message: "User Not deleted.")
+            print("User not deleted")
+        }
     }
+    
     
     func presentAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -57,4 +121,5 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(row + 1)"
     }
+        
 }

@@ -15,7 +15,6 @@ struct UserData: Decodable {
 }
 
 struct AddedUser: Codable {
-    
     let name: String
     let job: String
 }
@@ -25,12 +24,18 @@ struct AddUserData: Codable {
     let job: String
     let id: String
     let createdAt: String
-    
+}
+
+struct DeletedUser: Codable {
+    let id: String
 }
 
 struct SingleUserData: Decodable {
     let data: User
-    //let userMeta : [UserMeta]
+}
+
+struct DeletedUserData: Decodable {
+    let data: DeletedUser
 }
 
 struct UserMeta: Codable {
@@ -75,25 +80,6 @@ extension User {
     }
 }
 
-/*extension AddUserData {
-    init(from decoder: Decoder) throws {
-
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.job = try container.decode(String.self, forKey: .job)
-        self.id = try container.decode(String.self, forKey: .id)
-        self.createdAt = try container.decode(String.self, forKey: .createdAt)
-        
-        func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(self.name, forKey: .name)
-            try container.encode(self.job, forKey: .job)
-            try container.encode(self.id, forKey: .id)
-            try container.encode(self.createdAt, forKey: .createdAt)
-        }
-    }
-}*/
-
 extension UserMeta {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -107,11 +93,3 @@ extension UserMeta {
         }
     }
 }
-
-/*extension DateFormatter {
-    static let iso8601Full: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        return formatter
-    }()
-}*/
