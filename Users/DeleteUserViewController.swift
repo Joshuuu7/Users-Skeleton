@@ -42,10 +42,9 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
         let id = selectedId
         weak var weakSelf = self
         
-        let user = DeletedUser(id: "\(id)")
+        let deletedUser = DeletedUser(id: "\(id)")
         
         let usersURL = "https://reqres.in/api/users/" + "\(id)"
-        
         
         guard let url = URL(string: usersURL) else {
             // Perform some error handling
@@ -53,7 +52,7 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
             return
         }
         do {
-            let decodedUser = try JSONEncoder().encode(user.self)
+            let decodedUser = try JSONEncoder().encode(deletedUser.self)
             //weakSelf!.user = decodedUser
             var request = URLRequest(url: url)
             request.httpMethod = "DELETE"
@@ -72,12 +71,11 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
                 } else if (data == nil && error != nil) {
                     // Perform some error handling
                     DispatchQueue.main.async {
-                        print("No data deleted for User \(id).")
+                        print("No data deleted for User \(deletedUser.id).")
                     }
-                }
-                else {
+                } else {
                     print("Success: User deleted")
-                    self.presentAlert(title: "Success", message: "User deleted with ID \(id)")
+                    self.presentAlert(title: "Success", message: "User deleted with ID \(deletedUser.id)")
                 }
             }
             task.resume()
@@ -86,7 +84,6 @@ class DeleteUserViewController: UIViewController, UIPickerViewDataSource, UIPick
             print("User not deleted")
         }
     }
-    
     
     func presentAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
